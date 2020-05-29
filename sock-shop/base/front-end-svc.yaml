@@ -12,3 +12,20 @@ spec:
     targetPort: 8079
   selector:
     name: front-end
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: sockshop-server-ingress
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`sockshop.example.com`)
+      kind: Rule
+      services:
+        - name: front-end
+          port: 80
+  tls:
+    certResolver: le # Of course, we want this to be https
